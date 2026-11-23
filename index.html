@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f1ea" />
+    <title>Problem Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="site-header">
+        <a class="brand" href="#" aria-label="Problem Lab home">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <span>Problem Lab</span>
+        </a>
+        <button class="print-button" id="printButton" type="button" aria-label="Print worksheet">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 8V3h10v5M7 17H5a3 3 0 0 1-3-3v-3a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v3a3 3 0 0 1-3 3h-2M7 14h10v7H7z" />
+          </svg>
+          <span>Print</span>
+        </button>
+      </header>
+
+      <section class="workspace">
+        <aside class="controls" aria-label="Worksheet controls">
+          <div class="control-heading">
+            <p class="eyebrow">Worksheet setup</p>
+            <h1>Make practice<br />feel easy.</h1>
+          </div>
+
+          <fieldset class="control-group">
+            <legend>Operation</legend>
+            <div class="operation-grid" id="operationGrid">
+              <button class="operation-button active" type="button" data-operation="mixed" aria-pressed="true">
+                <span>Mix</span>
+              </button>
+              <button class="operation-button" type="button" data-operation="addition" aria-pressed="false">
+                <span>+</span>
+              </button>
+              <button class="operation-button" type="button" data-operation="subtraction" aria-pressed="false">
+                <span>&minus;</span>
+              </button>
+              <button class="operation-button" type="button" data-operation="multiplication" aria-pressed="false">
+                <span>&times;</span>
+              </button>
+              <button class="operation-button" type="button" data-operation="division" aria-pressed="false">
+                <span>&divide;</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <div class="control-group">
+            <label for="difficulty">Difficulty</label>
+            <div class="select-wrap">
+              <select id="difficulty">
+                <option value="easy">Easy · 1–20</option>
+                <option value="medium" selected>Medium · 1–100</option>
+                <option value="hard">Hard · 1–999</option>
+              </select>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4" /></svg>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="problemCount">Number of problems</label>
+            <div class="stepper">
+              <button id="decreaseCount" type="button" aria-label="Decrease number of problems">&minus;</button>
+              <output id="problemCount" aria-live="polite">10</output>
+              <button id="increaseCount" type="button" aria-label="Increase number of problems">+</button>
+            </div>
+          </div>
+
+          <div class="control-actions">
+            <button class="generate-button" id="generateButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5" />
+              </svg>
+              Generate new
+            </button>
+            <label class="answer-toggle">
+              <input id="showAnswers" type="checkbox" />
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span>Show answers</span>
+            </label>
+          </div>
+        </aside>
+
+        <section class="worksheet" aria-label="Generated math problems">
+          <div class="worksheet-header">
+            <div>
+              <p class="eyebrow">Today’s practice</p>
+              <h2 id="worksheetTitle">Mixed operations · Medium</h2>
+            </div>
+            <div class="worksheet-meta">
+              <span>Name</span>
+              <div></div>
+            </div>
+          </div>
+          <div class="problem-grid" id="problemGrid"></div>
+        </section>
+      </section>
+    </main>
+
+    <script defer src="./app.js"></script>
+  </body>
+</html>
