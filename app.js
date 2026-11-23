@@ -95,6 +95,7 @@ function renderProblems() {
 
     const answer = document.createElement("span");
     answer.className = `answer-space${showAnswersInput.checked ? "" : " blank"}`;
+    answer.dataset.answer = problem.answer;
     answer.textContent = showAnswersInput.checked ? problem.answer : " ";
 
     card.append(number, expression, answer);
@@ -143,7 +144,12 @@ increaseCountButton.addEventListener("click", () => {
 });
 
 generateButton.addEventListener("click", renderProblems);
-showAnswersInput.addEventListener("change", renderProblems);
+showAnswersInput.addEventListener("change", () => {
+  problemGrid.querySelectorAll(".answer-space").forEach((answer) => {
+    answer.classList.toggle("blank", !showAnswersInput.checked);
+    answer.textContent = showAnswersInput.checked ? answer.dataset.answer : " ";
+  });
+});
 printButton.addEventListener("click", () => window.print());
 
 renderProblems();

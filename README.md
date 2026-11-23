@@ -5,6 +5,7 @@ A simple, printable random math worksheet generator
 - Select one or more operation buttons to choose which problems appear
 - **Mix** selects all four operations
 - At least one operation must remain selected
+- **Show answers** reveals or hides answers without changing the worksheet
 
 ## Run without a server
 
