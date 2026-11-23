@@ -10,7 +10,7 @@ const worksheetTitle = document.querySelector("#worksheetTitle");
 const printButton = document.querySelector("#printButton");
 
 let operation = "mixed";
-let problemCount = 10;
+let problemCount = 20;
 
 const ranges = {
   easy: { min: 1, max: 20 },
@@ -103,6 +103,8 @@ function renderProblems() {
 operationButtons.forEach((button) => {
   button.addEventListener("click", () => {
     operation = button.dataset.operation;
+    problemCount = operation === "mixed" ? 20 : 10;
+    problemCountOutput.textContent = problemCount;
     operationButtons.forEach((item) => {
       const isActive = item === button;
       item.classList.toggle("active", isActive);
