@@ -2,6 +2,9 @@
 
 A simple, printable random math worksheet generator
 
+Select one or more operation buttons to choose which problems appear. **Mix**
+selects all four operations; at least one operation must remain selected.
+
 ## Run without a server
 
 Open `index.html` directly in a browser. The site runs entirely in the browser and does not need Node.js or a web server.

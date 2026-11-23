@@ -9,7 +9,8 @@ const problemGrid = document.querySelector("#problemGrid");
 const worksheetTitle = document.querySelector("#worksheetTitle");
 const printButton = document.querySelector("#printButton");
 
-let operation = "mixed";
+const operations = ["addition", "subtraction", "multiplication", "division"];
+let selectedOperations = [...operations];
 let problemCount = 20;
 
 const ranges = {
@@ -37,21 +38,15 @@ function randomInt(min, max) {
 }
 
 function makeProblem(selectedOperation, difficulty) {
-  let type = selectedOperation;
-  if (type === "mixed") {
-    const types = ["addition", "subtraction", "multiplication", "division"];
-    type = types[randomInt(0, types.length - 1)];
-  }
-
   const { min, max } = ranges[difficulty];
 
-  if (type === "addition") {
+  if (selectedOperation === "addition") {
     const a = randomInt(min, max);
     const b = randomInt(min, max);
     return { expression: `${a} + ${b}`, answer: a + b };
   }
 
-  if (type === "subtraction") {
+  if (selectedOperation === "subtraction") {
     let a = randomInt(min, max);
     let b = randomInt(min, max);
     if (difficulty !== "hard" && b > a) [a, b] = [b, a];
@@ -59,7 +54,7 @@ function makeProblem(selectedOperation, difficulty) {
     return { expression: `${a} − ${b}`, answer: a - b };
   }
 
-  if (type === "multiplication") {
+  if (selectedOperation === "multiplication") {
     const upper = difficulty === "easy" ? 12 : difficulty === "medium" ? 25 : max;
     const lowerUpper = difficulty === "hard" ? 50 : upper;
     const a = randomInt(min, upper);
@@ -75,10 +70,14 @@ function makeProblem(selectedOperation, difficulty) {
 
 function renderProblems() {
   const difficulty = difficultySelect.value;
-  worksheetTitle.textContent = `${operationTitles[operation]} · ${difficultyTitles[difficulty]}`;
+  const title = selectedOperations.length === 1
+    ? operationTitles[selectedOperations[0]]
+    : operationTitles.mixed;
+  worksheetTitle.textContent = `${title} · ${difficultyTitles[difficulty]}`;
   problemGrid.replaceChildren();
 
   for (let index = 0; index < problemCount; index += 1) {
+    const operation = selectedOperations[randomInt(0, selectedOperations.length - 1)];
     const problem = makeProblem(operation, difficulty);
     const card = document.createElement("article");
     card.className = "problem-card";
@@ -102,13 +101,25 @@ function renderProblems() {
 
 operationButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    operation = button.dataset.operation;
-    problemCount = operation === "mixed" ? 20 : 10;
+    const operation = button.dataset.operation;
+    if (operation === "mixed") {
+      selectedOperations = [...operations];
+    } else if (selectedOperations.includes(operation)) {
+      if (selectedOperations.length === 1) return;
+      selectedOperations = selectedOperations.filter((item) => item !== operation);
+    } else {
+      selectedOperations.push(operation);
+    }
+
+    problemCount = selectedOperations.length === 1 ? 10 : 20;
     problemCountOutput.textContent = problemCount;
     operationButtons.forEach((item) => {
-      const isActive = item === button;
+      const isActive = item.dataset.operation === "mixed"
+        ? selectedOperations.length === operations.length
+        : selectedOperations.includes(item.dataset.operation);
       item.classList.toggle("active", isActive);
       item.setAttribute("aria-pressed", String(isActive));
+      item.disabled = isActive && item.dataset.operation !== "mixed" && selectedOperations.length === 1;
     });
     renderProblems();
   });

@@ -38,24 +38,25 @@
           </div>
 
           <fieldset class="control-group">
-            <legend>Operation</legend>
+            <legend>Operations</legend>
             <div class="operation-grid" id="operationGrid">
               <button class="operation-button active" type="button" data-operation="mixed" aria-pressed="true">
                 <span>Mix</span>
               </button>
-              <button class="operation-button" type="button" data-operation="addition" aria-pressed="false">
+              <button class="operation-button active" type="button" data-operation="addition" aria-label="Addition" aria-pressed="true">
                 <span>+</span>
               </button>
-              <button class="operation-button" type="button" data-operation="subtraction" aria-pressed="false">
+              <button class="operation-button active" type="button" data-operation="subtraction" aria-label="Subtraction" aria-pressed="true">
                 <span>&minus;</span>
               </button>
-              <button class="operation-button" type="button" data-operation="multiplication" aria-pressed="false">
+              <button class="operation-button active" type="button" data-operation="multiplication" aria-label="Multiplication" aria-pressed="true">
                 <span>&times;</span>
               </button>
-              <button class="operation-button" type="button" data-operation="division" aria-pressed="false">
+              <button class="operation-button active" type="button" data-operation="division" aria-label="Division" aria-pressed="true">
                 <span>&divide;</span>
               </button>
             </div>
+            <p class="operation-hint">Choose one or more operations. Mix selects all.</p>
           </fieldset>
 
           <div class="control-group">

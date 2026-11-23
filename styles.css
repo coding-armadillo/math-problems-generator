@@ -158,6 +158,12 @@ button, select, .answer-toggle { cursor: pointer; }
   gap: 7px;
 }
 
+.operation-hint {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
 .operation-button {
   height: 46px;
   border: 1px solid var(--line);
@@ -177,6 +183,7 @@ button, select, .answer-toggle { cursor: pointer; }
 }
 
 .operation-button:hover { border-color: #aaa89f; }
+.operation-button:disabled { cursor: default; }
 .operation-button.active {
   border-color: var(--purple-dark);
   background: var(--purple);
@@ -316,9 +323,7 @@ button, select, .answer-toggle { cursor: pointer; }
 .worksheet {
   min-width: 0;
   padding: 44px 52px 48px;
-  background:
-    linear-gradient(rgba(32,33,30,.025) 1px, transparent 1px) 0 0 / 100% 58px,
-    var(--white);
+  background: var(--white);
 }
 
 .worksheet-header {
