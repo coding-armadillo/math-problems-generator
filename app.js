@@ -7,6 +7,7 @@ const generateButton = document.querySelector("#generateButton");
 const showAnswersInput = document.querySelector("#showAnswers");
 const problemGrid = document.querySelector("#problemGrid");
 const worksheetTitle = document.querySelector("#worksheetTitle");
+const worksheetId = document.querySelector("#worksheetId");
 const printButton = document.querySelector("#printButton");
 
 const operations = ["addition", "subtraction", "multiplication", "division"];
@@ -70,6 +71,8 @@ function makeProblem(selectedOperation, difficulty) {
 
 function renderProblems() {
   const difficulty = difficultySelect.value;
+  worksheetId.textContent = randomInt(10000000, 99999999);
+  document.title = `Problem Lab - ${worksheetId.textContent}`;
   const title = selectedOperations.length === 1
     ? operationTitles[selectedOperations[0]]
     : operationTitles.mixed;
