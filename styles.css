@@ -246,6 +246,54 @@ button, select, .answer-toggle { cursor: pointer; }
   font-weight: 500;
 }
 
+.selection-save, .selection-load {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px;
+}
+
+.selection-load { margin-top: 7px; }
+
+.selection-save input, .selection-load select {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--white);
+  font-size: 11px;
+}
+
+.selection-save button, .selection-load button {
+  min-width: 54px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--white);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.selection-save button:hover, .selection-load button:not(:disabled):hover {
+  border-color: var(--purple);
+  color: var(--purple-dark);
+}
+
+.selection-load button:disabled {
+  cursor: default;
+  opacity: .55;
+}
+
+.selection-status {
+  min-height: 14px;
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
 .control-actions {
   display: grid;
   gap: 16px;

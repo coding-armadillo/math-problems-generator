@@ -9,10 +9,16 @@ const problemGrid = document.querySelector("#problemGrid");
 const worksheetTitle = document.querySelector("#worksheetTitle");
 const worksheetId = document.querySelector("#worksheetId");
 const printButton = document.querySelector("#printButton");
+const selectionNameInput = document.querySelector("#selectionName");
+const saveSelectionButton = document.querySelector("#saveSelection");
+const savedSelectionsSelect = document.querySelector("#savedSelections");
+const loadSelectionButton = document.querySelector("#loadSelection");
+const selectionStatus = document.querySelector("#selectionStatus");
 
 const operations = ["addition", "subtraction", "multiplication", "division"];
 let selectedOperations = [...operations];
 let problemCount = 20;
+const savedSelectionsKey = "problem-lab.saved-selections";
 
 const ranges = {
   easy: { min: 1, max: 20 },
@@ -105,6 +111,58 @@ function renderProblems() {
   }
 }
 
+function updateOperationButtons() {
+  operationButtons.forEach((item) => {
+    const isActive = item.dataset.operation === "mixed"
+      ? selectedOperations.length === operations.length
+      : selectedOperations.includes(item.dataset.operation);
+    item.classList.toggle("active", isActive);
+    item.setAttribute("aria-pressed", String(isActive));
+    item.disabled = isActive && item.dataset.operation !== "mixed" && selectedOperations.length === 1;
+  });
+}
+
+function readSavedSelections() {
+  const saved = localStorage.getItem(savedSelectionsKey);
+  if (saved === null) return [];
+
+  const selections = JSON.parse(saved);
+  if (!Array.isArray(selections) || selections.some((selection) =>
+    !selection
+      || typeof selection !== "object"
+      || typeof selection.name !== "string"
+      || !selection.name.trim()
+      || !Array.isArray(selection.operations)
+      || selection.operations.length === 0
+      || new Set(selection.operations).size !== selection.operations.length
+      || selection.operations.some((operation) => !operations.includes(operation))
+      || !["easy", "medium", "hard", "extreme"].includes(selection.difficulty)
+      || !Number.isInteger(selection.problemCount)
+      || selection.problemCount < 4
+      || selection.problemCount > 20
+  )) {
+    throw new Error("Saved selections are invalid.");
+  }
+  return selections;
+}
+
+function refreshSavedSelections() {
+  const selectedName = savedSelectionsSelect.value;
+  const selections = readSavedSelections();
+  savedSelectionsSelect.replaceChildren(new Option("Choose a saved selection", ""));
+  selections.forEach(({ name }) => {
+    savedSelectionsSelect.add(new Option(name, name));
+  });
+  savedSelectionsSelect.value = selections.some(({ name }) => name === selectedName)
+    ? selectedName
+    : "";
+  loadSelectionButton.disabled = !savedSelectionsSelect.value;
+}
+
+function showSelectionError(error) {
+  selectionStatus.textContent = `Could not access saved selections: ${error.message}`;
+}
+
 operationButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const operation = button.dataset.operation;
@@ -119,14 +177,7 @@ operationButtons.forEach((button) => {
 
     problemCount = selectedOperations.length === 1 ? 10 : 20;
     problemCountOutput.textContent = problemCount;
-    operationButtons.forEach((item) => {
-      const isActive = item.dataset.operation === "mixed"
-        ? selectedOperations.length === operations.length
-        : selectedOperations.includes(item.dataset.operation);
-      item.classList.toggle("active", isActive);
-      item.setAttribute("aria-pressed", String(isActive));
-      item.disabled = isActive && item.dataset.operation !== "mixed" && selectedOperations.length === 1;
-    });
+    updateOperationButtons();
     renderProblems();
   });
 });
@@ -146,6 +197,64 @@ increaseCountButton.addEventListener("click", () => {
 });
 
 generateButton.addEventListener("click", renderProblems);
+savedSelectionsSelect.addEventListener("change", () => {
+  loadSelectionButton.disabled = !savedSelectionsSelect.value;
+});
+
+saveSelectionButton.addEventListener("click", () => {
+  const name = selectionNameInput.value.trim();
+  if (!name) {
+    selectionStatus.textContent = "Enter a name for this selection.";
+    selectionNameInput.focus();
+    return;
+  }
+
+  try {
+    const selections = readSavedSelections();
+    const selection = {
+      name,
+      operations: [...selectedOperations],
+      difficulty: difficultySelect.value,
+      problemCount
+    };
+    const existingIndex = selections.findIndex(
+      (item) => item.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+    );
+    if (existingIndex === -1) selections.push(selection);
+    else selections[existingIndex] = selection;
+    localStorage.setItem(savedSelectionsKey, JSON.stringify(selections));
+    refreshSavedSelections();
+    savedSelectionsSelect.value = selection.name;
+    loadSelectionButton.disabled = !savedSelectionsSelect.value;
+    selectionNameInput.value = "";
+    selectionStatus.textContent = `Saved "${name}".`;
+  } catch (error) {
+    showSelectionError(error);
+  }
+});
+
+loadSelectionButton.addEventListener("click", () => {
+  try {
+    const selection = readSavedSelections().find(
+      (item) => item.name === savedSelectionsSelect.value
+    );
+    if (!selection) {
+      selectionStatus.textContent = "Choose a saved selection to load.";
+      return;
+    }
+
+    selectedOperations = [...selection.operations];
+    difficultySelect.value = selection.difficulty;
+    problemCount = selection.problemCount;
+    problemCountOutput.textContent = problemCount;
+    updateOperationButtons();
+    renderProblems();
+    selectionStatus.textContent = `Loaded "${selection.name}".`;
+  } catch (error) {
+    showSelectionError(error);
+  }
+});
+
 showAnswersInput.addEventListener("change", () => {
   problemGrid.querySelectorAll(".answer-space").forEach((answer) => {
     answer.classList.toggle("blank", !showAnswersInput.checked);
@@ -154,4 +263,9 @@ showAnswersInput.addEventListener("change", () => {
 });
 printButton.addEventListener("click", () => window.print());
 
+try {
+  refreshSavedSelections();
+} catch (error) {
+  showSelectionError(error);
+}
 renderProblems();

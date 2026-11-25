@@ -81,6 +81,21 @@
             </div>
           </div>
 
+          <div class="control-group saved-selections">
+            <label for="selectionName">Saved selections</label>
+            <div class="selection-save">
+              <input id="selectionName" type="text" maxlength="40" placeholder="Name this selection" />
+              <button id="saveSelection" type="button">Save</button>
+            </div>
+            <div class="selection-load">
+              <select id="savedSelections" aria-label="Choose a saved selection">
+                <option value="">Choose a saved selection</option>
+              </select>
+              <button id="loadSelection" type="button" disabled>Load</button>
+            </div>
+            <p id="selectionStatus" class="selection-status" role="status" aria-live="polite"></p>
+          </div>
+
           <div class="control-actions">
             <button class="generate-button" id="generateButton" type="button">
               <svg viewBox="0 0 24 24" aria-hidden="true">

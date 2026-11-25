@@ -6,6 +6,7 @@ A simple, printable random math worksheet generator
 - **Mix** selects all four operations
 - At least one operation must remain selected
 - **Show answers** reveals or hides answers without changing the worksheet
+- Name and save worksheet selections (operations, difficulty, and problem count) in your browser, then load them later
 
 ## Run without a server
 
