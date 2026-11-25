@@ -17,7 +17,8 @@ let problemCount = 20;
 const ranges = {
   easy: { min: 1, max: 20 },
   medium: { min: 1, max: 100 },
-  hard: { min: 1, max: 999 }
+  hard: { min: 1, max: 999 },
+  extreme: { min: 1, max: 10000 }
 };
 
 const operationTitles = {
@@ -31,7 +32,8 @@ const operationTitles = {
 const difficultyTitles = {
   easy: "Easy",
   medium: "Medium",
-  hard: "Hard"
+  hard: "Hard",
+  extreme: "Extreme"
 };
 
 function randomInt(min, max) {
@@ -63,8 +65,8 @@ function makeProblem(selectedOperation, difficulty) {
     return { expression: `${a} × ${b}`, answer: a * b };
   }
 
-  const divisor = randomInt(2, difficulty === "easy" ? 12 : difficulty === "medium" ? 25 : 50);
-  const quotient = randomInt(min, difficulty === "easy" ? 12 : difficulty === "medium" ? 40 : 100);
+  const divisor = randomInt(2, difficulty === "easy" ? 12 : difficulty === "medium" ? 25 : difficulty === "hard" ? 50 : max);
+  const quotient = randomInt(min, difficulty === "easy" ? 12 : difficulty === "medium" ? 40 : difficulty === "hard" ? 100 : max);
   const dividend = divisor * quotient;
   return { expression: `${dividend} ÷ ${divisor}`, answer: quotient };
 }
