@@ -8,6 +8,7 @@ const showAnswersInput = document.querySelector("#showAnswers");
 const problemGrid = document.querySelector("#problemGrid");
 const worksheetTitle = document.querySelector("#worksheetTitle");
 const worksheetId = document.querySelector("#worksheetId");
+const worksheetSelectionName = document.querySelector("#worksheetSelectionName");
 const printButton = document.querySelector("#printButton");
 const selectionNameInput = document.querySelector("#selectionName");
 const saveSelectionButton = document.querySelector("#saveSelection");
@@ -122,6 +123,10 @@ function updateOperationButtons() {
   });
 }
 
+function showWorksheetSelectionName(name) {
+  worksheetSelectionName.textContent = name || "";
+}
+
 function readSavedSelections() {
   const saved = localStorage.getItem(savedSelectionsKey);
   if (saved === null) return [];
@@ -177,22 +182,28 @@ operationButtons.forEach((button) => {
 
     problemCount = selectedOperations.length === 1 ? 10 : 20;
     problemCountOutput.textContent = problemCount;
+    showWorksheetSelectionName("");
     updateOperationButtons();
     renderProblems();
   });
 });
 
-difficultySelect.addEventListener("change", renderProblems);
+difficultySelect.addEventListener("change", () => {
+  showWorksheetSelectionName("");
+  renderProblems();
+});
 
 decreaseCountButton.addEventListener("click", () => {
   problemCount = Math.max(4, problemCount - 2);
   problemCountOutput.textContent = problemCount;
+  showWorksheetSelectionName("");
   renderProblems();
 });
 
 increaseCountButton.addEventListener("click", () => {
   problemCount = Math.min(20, problemCount + 2);
   problemCountOutput.textContent = problemCount;
+  showWorksheetSelectionName("");
   renderProblems();
 });
 
@@ -227,6 +238,7 @@ saveSelectionButton.addEventListener("click", () => {
     savedSelectionsSelect.value = selection.name;
     loadSelectionButton.disabled = !savedSelectionsSelect.value;
     selectionNameInput.value = "";
+    showWorksheetSelectionName(selection.name);
     selectionStatus.textContent = `Saved "${name}".`;
   } catch (error) {
     showSelectionError(error);
@@ -247,6 +259,7 @@ loadSelectionButton.addEventListener("click", () => {
     difficultySelect.value = selection.difficulty;
     problemCount = selection.problemCount;
     problemCountOutput.textContent = problemCount;
+    showWorksheetSelectionName(selection.name);
     updateOperationButtons();
     renderProblems();
     selectionStatus.textContent = `Loaded "${selection.name}".`;
